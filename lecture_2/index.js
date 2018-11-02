@@ -7,11 +7,7 @@
  */
 function compare(a, b) {
     if (Number.isFinite(a) && Number.isFinite(b)) {
-        if (a > b) {
-            return true;
-        } else {
-            return false;
-        }
+        return a > b;
     } else {
         console.log('Error. The arguments is not a number')
     }
