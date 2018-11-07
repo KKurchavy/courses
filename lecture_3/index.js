@@ -1,4 +1,4 @@
-var toolsBox = (function () {
+var toolBox = (function () {
     return {
         isUndefined: function (any) {
             if (arguments.length) {
