@@ -8,8 +8,8 @@ function debounce(callback, delay) {
         }
 
         this.timerId = setTimeout(function () {
-            callback.apply(null, args);
-        },
+                callback.apply(null, args);
+            },
             delay
         );
 
