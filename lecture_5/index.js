@@ -1,36 +1,43 @@
 function debounce(callback, delay) {
+    var timerId;
 
     return function () {
-
         var args = arguments;
-        if (this.timerId) {
-            clearTimeout(this.timerId);
+
+        if (timerId) {
+            clearTimeout(timerId);
         }
 
-        this.timerId = setTimeout(function () {
-                callback.apply(null, args);
-            },
+        timerId = setTimeout(function () {
+            callback.apply(null, args);
+        },
             delay
         );
-
     }
-
 }
 
 function setTimer(delay) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
         setTimeout(resolve, delay);
     });
 }
 
-function httpGet(url) {
 
+
+function XHR(method, url, body) {
     return new Promise(function (resolve, reject) {
-
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
 
-        xhr.onload = function () {
+        xhr.open(method, url, true);
+        xhr.send(body);
+
+        //прошлая реализация через onload и onerror была заимствована :(
+        //в этот раз через onreadystatechange, чтобы не повторяться ;)
+        xhr.onreadystatechange = function () {
+            if (this.readyState != 4) {
+                reject(new Error("Network Error"));
+            }
+
             if (this.status == 200) {
                 resolve(this.response);
             } else {
@@ -38,15 +45,8 @@ function httpGet(url) {
                 error.code = this.status;
                 reject(error);
             }
-        };
-
-        xhr.onerror = function () {
-            reject(new Error("Network Error"));
-        };
-
-        xhr.send();
-    });
-
+        }
+    })
 }
 
 function request(url) {
@@ -57,6 +57,27 @@ function request(url) {
     });
 }
 
-function getResults() {
-    return Promise.all(Array.prototype.map.call(arguments, request));
+function performRequests(list) {
+    return new Promise((res, rej) => {
+        var promises = list.map(request);
+        var resArray = [];
+
+        promises.forEach(element => {
+
+            element.then(result => {
+                resArray.push(result);
+
+                if (resArray.length == promises.length) {
+                    res(resArray)
+                }
+            }, result => {
+                resArray.push(result);
+
+                if (resArray.length == promises.length) {
+                    res(resArray)
+                }
+            });
+
+        });
+    });
 }
