@@ -1,0 +1,95 @@
+div {
+    float: left;
+}
+
+.info {
+    width: 100%;
+    margin-bottom: 2%;
+}
+
+.butget {
+    width: 49%;
+    text-align: center;
+    font-size: 26px;
+    border: 2px solid black;
+}
+
+.company-name {
+    width: 49%;
+    text-align: center;
+    font-size: 26px;
+    border: 2px solid black;
+}
+
+.content {
+    width: 100%;
+}
+
+.list-box {
+    width: 100%;
+    margin-bottom: 2%;
+}
+
+.list {
+    width: 49%;
+    min-height: 130px;
+    border: 2px solid black;
+}
+
+.projects {
+    width: 98%;
+    min-height: 100px;
+    border: 2px solid black;
+}
+
+.worker {
+    width: 24%;
+    margin: 1px;
+    border: 1px solid black;
+    border-radius: 3px;
+    text-align: center; 
+}
+
+.project {
+    width: 10.5%;
+    margin: 1px;
+    border: 1px solid black;
+    border-radius: 3px;
+    text-align: center; 
+}
+
+.hire-button {
+    width: 100%;
+    background-color: #673AB7;
+    cursor: pointer;
+}
+
+.remove-button {
+    background-color: lightcoral;
+}
+
+.game-run {
+    width: 100%;
+}
+
+.button {
+    width: 49%;
+    border: 2px solid black;
+    font-size: 26px;
+    text-align: center;
+    margin-bottom: 10px;
+    background-color: brown;
+    cursor: pointer;
+}
+
+.start {
+    background-color: limegreen;
+}
+
+.column-name {
+    width: 49%;
+    min-height: 30px;
+    border: 2px solid black;
+    font-size: 24px;
+    text-align: center;
+}
