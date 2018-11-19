@@ -31,22 +31,22 @@ function XHR(method, url, body) {
         xhr.open(method, url, true);
         xhr.send(body);
 
-        //прошлая реализация через onload и onerror была заимствована :(
-        //в этот раз через onreadystatechange, чтобы не повторяться ;)
+        // плохая идея была делать через onreadystatechange
+        // теперь отваливается только где нужно)
         xhr.onreadystatechange = function () {
-            if (this.readyState != 4) {
-                reject(new Error("Network Error"));
-            }
+            if (this.readyState == 4) {
+                
+                if (this.status == 200) {
+                    resolve(this.response);
+                } else {
+                    var error = new Error(this.statusText);
+                    error.code = this.status;
+                    reject(error);
+                }
 
-            if (this.status == 200) {
-                resolve(this.response);
-            } else {
-                var error = new Error(this.statusText);
-                error.code = this.status;
-                reject(error);
             }
         }
-    })
+    });
 }
 
 function request(url) {
@@ -70,13 +70,7 @@ function performRequests(list) {
                 if (resArray.length == promises.length) {
                     res(resArray)
                 }
-            }, result => {
-                resArray.push(result);
-
-                if (resArray.length == promises.length) {
-                    res(resArray)
-                }
-            });
+            }, rej);
 
         });
     });
