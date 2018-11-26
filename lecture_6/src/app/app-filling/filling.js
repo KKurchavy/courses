@@ -1,23 +1,23 @@
-var filling = (function () {
+const filling = (function () {
     return {
 
-        createNode: (object) => {
+        createNode(object) {
 
-            var node = document.createElement("div");
+            let node = document.createElement("div");
             
             switch (object.constructor.name) {
                 case "Project":
                     node.classList.add("project");
                     node.appendChild(document.createTextNode(object.name));
                     node.appendChild(document.createElement("hr"));
-                    node.appendChild(document.createTextNode("строки: " + object.linesCount));
+                    node.appendChild(document.createTextNode(`строки: ${object.linesCount}`));
                     node.appendChild(document.createElement("hr"));
-                    node.appendChild(document.createTextNode("цена: " + object.cost));
+                    node.appendChild(document.createTextNode(`цена:${object.cost}`));
                     break;
 
                 default: 
                     node.classList.add("worker");
-                    node.appendChild(document.createTextNode(object.name + " " + object.surname));
+                    node.appendChild(document.createTextNode(`${object.name} ${object.surname}`));
                     node.appendChild(document.createElement("hr"));
 
                     if (object instanceof Developer) {
@@ -29,9 +29,9 @@ var filling = (function () {
                     }
 
                     node.appendChild(document.createElement("hr"));
-                    node.appendChild(document.createTextNode("ЗП:" + object.salary + "$"));
+                    node.appendChild(document.createTextNode(`ЗП: ${object.salary}$`));
                     node.appendChild(document.createElement("hr"));
-                    var button = document.createElement("div");
+                    var button = document.createElement("button");
                     button.classList.add("hire-button");
                     button.innerText = "нанять";
                     node.appendChild(button);
@@ -40,10 +40,10 @@ var filling = (function () {
             return node;
         },
 
-        showListInNode: (list, node) => {
-            list.forEach((obj)=>{
-                node.appendChild(obj.htmlWiev);
-            });
+        showListInNode(list, node) {
+            list.forEach((obj) => {
+                node.appendChild(obj.htmlView);
+            })
         }
     }
 })();

@@ -1,23 +1,21 @@
-//Менеджер руководит проектом (связывает программистов и проект, имя, фамилия, опыт (используется как коэфициент к труду программистов), список сотрудников, список проектов)
+class Manager extends Worker {
 
-function Manager(name, surname, experience, salary) {
-    Worker.apply(this, arguments);
-    this.experience = experience;
-    this.salary = salary;
-    this.htmlWiev = filling.createNode(this);
-}
+    constructor(name, surname, experience, salary){
+        super(name, surname)
+        this.salary = salary;
+        this.experience = experience;
+        this.htmlView = filling.createNode(this);
+    }
 
-Manager.prototype = Object.create(Worker.prototype);
-Manager.prototype.constructor = Manager;
+    getProject(list) {
+        this.project = list.pop();
+    }
 
-Manager.prototype.getProject = function(list) {
-    this.project = list.pop();
-}
+    selectDeveloperForProject(devsList) {
+        this.project.addDeveloper(devsList.pop());
+    }
 
-Manager.prototype.selectDeveloperForProject = function(devsList) {
-    let developer = devsList.pop();
-    this.project.addDeveloper(developer);
-}
-Manager.prototype.addLinesForProject = function() {
-    this.project.linesCount -= this.project.developer.linesCount * this.experience;
+    addLinesForProject() {
+        this.project.linesCount -= this.project.developer.linesCount * this.experience;
+    }
 }

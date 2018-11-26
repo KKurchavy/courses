@@ -1,15 +1,15 @@
-var events = (function(){
+let events = (function(){
     return {
 
-        hiringHandler: function(event) {
+        hireHandler(event) {
 
             if(event.target.className == "hire-button") {
 
                 if(event.target.parentElement.className == "worker developer") {
-                    let developer = events.hiring(event.target.parentElement, entities.developers);
+                    let developer = events.hire(event.target.parentElement, entities.developers);
                     developers.addDeveloper( developer );
                 } else {
-                    let manager = events.hiring(event.target.parentElement, entities.managers);
+                    let manager = events.hire(event.target.parentElement, entities.managers);
                     managers.addManager( manager );
                 }
 
@@ -17,61 +17,61 @@ var events = (function(){
 
         },
 
-        removingHandler: function(event) {
+        fireHandler(event) {
             
             if(event.target.classList[1] == "remove-button") {
 
                 if(event.target.parentElement.className == "worker developer") {
-                    let developer = events.removing(event.target.parentElement, developers);
-                    removeElementFromList(developers.all, developer);
+                    let developer = events.fire(event.target.parentElement, developers.all);
+                    developers.all.remove(developer);
                 } else {
-                    let manager = events.removing(event.target.parentElement, managers);
-                    removeElementFromList(developers.all, manager);
+                    let manager = events.fire(event.target.parentElement, managers.all);
+                    developers.all.remove(manager);
                 }
 
             }
 
         },
 
-        setEventForElem: function(elem, func) {
+        setHandler(elem, func) {
             elem.addEventListener("click", func);
         },
 
-        hiring: function(elem, list) {
-            var currentElem = events.searchElement(elem, list);
-            events.changeButton(currentElem.htmlWiev.lastChild);
+        hire(elem, list) {
+            const currentElem = events.searchElement(elem, list);
+            events.changeButton(currentElem.htmlView.lastChild);
 
             document.querySelector(".workers")
                 .querySelector("."+ elem.classList[1] +"s")
-                .appendChild(currentElem.htmlWiev);
+                .appendChild(currentElem.htmlView);
 
             return currentElem;    
         },
 
-        removing: function(elem, list) {
-            var currentElem = events.searchElement(elem, list.all);
-            events.changeButton(currentElem.htmlWiev.lastChild);
+        fire(elem, list) {
+            const currentElem = events.searchElement(elem, list);
+            events.changeButton(currentElem.htmlView.lastChild);
             
             document.querySelector(".applicants")
                     .querySelector("."+ elem.classList[1] +"s")
-                    .appendChild(currentElem.htmlWiev);
+                    .appendChild(currentElem.htmlView);
 
-            removeElementFromList(list, currentElem);
+            list.remove(currentElem);
             
             return currentElem;
         },
 
-        searchElement: function(htmlWiev, list) {
+        searchElement(htmlView, list) {
             for(let i = 0; i < list.length; i++){
 
-                if(list[i].htmlWiev == htmlWiev){
+                if(list[i].htmlView == htmlView){
                     return list[i];    
                 }
 
             }
         },
 
-        changeButton: function(button) {
+        changeButton(button) {
             if(button.innerText == "нанять"){
 
                 button.innerText = "уволить";
@@ -85,4 +85,3 @@ var events = (function(){
 
     }
 })()
-
