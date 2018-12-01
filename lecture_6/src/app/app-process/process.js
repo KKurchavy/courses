@@ -1,65 +1,62 @@
-var process = (function() {
-    var TIMER_ID;
-    var TICK_TIME = 2000;
+const process = (() => {
+    let TIMER_ID;
+    const TICK_TIME = 2000;
 
-    var UNOCCUPIED_PROJECTS = [];
-    var UNOCCUPIED_DEVELOPERS = [];
-    var UNOCCUPIED_MANAGERS = [];
+    let UNOCCUPIED_PROJECTS;
+    let UNOCCUPIED_DEVELOPERS;
+    let UNOCCUPIED_MANAGERS;
 
-    var WORKING_MANAGERS = [];
+    let WORKING_MANAGERS = [];
 
     return {
-        start: function() {
+        start() {
             getWorkers();
 
-            if(UNOCCUPIED_MANAGERS == 0 || UNOCCUPIED_DEVELOPERS == 0){
-                alert("необходимо нанять минимум одного пр-та и одного менеджера");
-
-                return;
+            if(toWork()){
+                TIMER_ID = setInterval(run, TICK_TIME);
             }
-
-            toWork();
-            TIMER_ID = setInterval(run, TICK_TIME);
+            
         },
 
-        stop: function() {
-            clearTimeout(TIMER_ID);
-            getWorkers(); 
+        stop() {
+            clearTimeout(TIMER_ID); 
         }
     }
 
     function run() {
-        WORKING_MANAGERS.forEach(function(manager) {
+        UNOCCUPIED_DEVELOPERS.forEach(butget.getSalary);
+        WORKING_MANAGERS.forEach((manager) => {
             butget.getSalary(manager);
             butget.getSalary(manager.project.developer);
             manager.addLinesForProject();
 
             if(manager.project.linesCount < 0){
                 UNOCCUPIED_DEVELOPERS.push(manager.project.developer);
-                UNOCCUPIED_MANAGERS.push(removeElementFromList(WORKING_MANAGERS, manager));
+                UNOCCUPIED_MANAGERS.push(WORKING_MANAGERS.remove(manager));
                 butget.setProfit(manager.project);
-                
-                removeHtmlWievIn(manager.project, document.querySelector(".projects").childNodes)
-                removeElementFromList(entities.projects, manager.project);
-
-
+                removeHtmlViewIn(manager.project, document.querySelector(".projects").childNodes )
+                entities.projects.remove(manager.project);
                 filling.showListInNode(entities.projects, document.querySelector(".projects"));
-                
                 toWork();
             }
 
         });
-        
-        document.querySelector(".butget").innerText = butget.getMoneyCount() + "$";
+        document.querySelector(".butget").innerText = `${butget.getMoneyCount()}$`;
     }
 
     function toWork() {
-        UNOCCUPIED_MANAGERS.forEach(function(manager) {
+        
+        if(!UNOCCUPIED_MANAGERS.length || !UNOCCUPIED_DEVELOPERS.length){
+            alert("необходимо нанять минимум одного пр-та и менеджера");
+            return;
+        }
+
+        UNOCCUPIED_MANAGERS.forEach((manager) => {
 
             if(UNOCCUPIED_PROJECTS.length){
             manager.getProject(UNOCCUPIED_PROJECTS);
             manager.selectDeveloperForProject(UNOCCUPIED_DEVELOPERS);
-            WORKING_MANAGERS.push(removeElementFromList(UNOCCUPIED_MANAGERS, manager));
+            WORKING_MANAGERS.push(UNOCCUPIED_MANAGERS.remove(manager));
             } else {
 				clearTimeout(TIMER_ID);
                 alert("Невероятно, на данный момент проектов нет :(");
@@ -67,13 +64,15 @@ var process = (function() {
             }
 
         });
+        
+        return true;
     }
 
-    function removeHtmlWievIn(element, ListHtmlWievs) {
-        for(let i = 0; i < ListHtmlWievs.length; i++) {
+    function removeHtmlViewIn(element, ListHtmlViews) {
+        for(let i = 0; i < ListHtmlViews.length; i++) {
 
-            if(element.htmlWiev == ListHtmlWievs[i]) {
-                ListHtmlWievs[i].remove();
+            if(element.htmlView == ListHtmlViews[i]) {
+                ListHtmlViews[i].remove();
                 
                 return;
             }
@@ -83,15 +82,28 @@ var process = (function() {
     
 
     function getWorkers() {
-        copyArray(UNOCCUPIED_PROJECTS, entities.projects);
-        copyArray(UNOCCUPIED_DEVELOPERS, developers.all);
-        copyArray(UNOCCUPIED_MANAGERS, managers.all);
+        UNOCCUPIED_PROJECTS = entities.projects.copy();
+        UNOCCUPIED_DEVELOPERS = developers.all.copy();
+        UNOCCUPIED_MANAGERS = managers.all.copy();
     }
 
-    function copyArray(duplicate, array) {
-        duplicate.length = 0;
-        for(let i = 0; i < array.length; i++){
-            duplicate[i] = array[i];
+})();
+
+
+Array.prototype.copy = function () {
+    return this.slice();
+}
+
+Array.prototype.remove = function (element) {
+
+    for (let i = 0; i < this.length; i++) {
+
+        if (this[i] == element) {
+            element = this.splice(i, 1)[0];
+
+            return element;
         }
+
     }
-})()
+
+}
