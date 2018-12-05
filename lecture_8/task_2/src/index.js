@@ -9,28 +9,29 @@ const TYPES = {
     ".css": "text/css",
   };
 
-const server = http.createServer((require, result) => {
+const server = http.createServer((request, response) => {
 
-    if(require.url === "/") {
-        require.url = "index.html";
+    if(request.url === "/") {
+        request.url = "index.html";
     }
-
-    const fullPath = path.join("./game", require.url);
+	
+    const fullPath = path.join(__dirname, "../game", request.url);
+	console.log(fullPath);
 
     fs.readFile(fullPath, (err, data) => {
 
         if(err) {
-            result.writeHead(500, { "Content-Type": "text/plain" });
-            result.end();
+            response.writeHead(500, { "Content-Type": "text/plain" });
+            response.end();
 
             console.error("Server error", err);
         } else {
             const contentType = TYPES[path.extname(fullPath)];
 
-            result.writeHead(200, {
+            response.writeHead(200, {
                 "Content-Type": contentType
             });
-            result.end(data);
+            response.end(data);
         }
 
     })
